@@ -6,6 +6,20 @@ const users = require('./data/usersQueries');
 const server = express();
 server.use(express.json());
 
+server.use('/restricted', async (req, res, next) => {
+  try {
+    const { cookie } = req.headers;
+
+    if (await users.getUserById(cookie)) {
+      next();
+    } else {
+      res.status(403).json({ message: 'You shall not pass!' });
+    }
+  } catch(err) {
+    res.status(500).json(err);
+  }
+});
+
 server.post('/api/register', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -42,7 +56,7 @@ server.get('/api/users', async (req, res) => {
     if (await users.getUserById(cookie)) {
       res.status(200).json(await users.getUsers());
     } else {
-      res.status(403).json({ message: 'You shall not pass!' })
+      res.status(403).json({ message: 'You shall not pass!' });
     }
   } catch(err) {
     res.status(500).json(err);
