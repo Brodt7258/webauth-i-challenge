@@ -1,10 +1,12 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const cors = require('cors');
 
 const users = require('./data/usersQueries');
 
 const server = express();
 server.use(express.json());
+server.use(cors());
 
 server.use('/restricted', async (req, res, next) => {
   try {
@@ -36,6 +38,7 @@ server.post('/api/register', async (req, res) => {
 server.post('/api/login', async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log(username, password);
     const user = await users.getUserByName(username);
 
     if (user && bcrypt.compareSync(password, user.password)) {
@@ -50,10 +53,9 @@ server.post('/api/login', async (req, res) => {
 
 server.get('/api/users', async (req, res) => {
   try {
-    //console.log(req.headers.cookie);
-    const { cookie } = req.headers;
+    const { authorization } = req.headers;
     
-    if (await users.getUserById(cookie)) {
+    if (await users.getUserById(authorization)) {
       res.status(200).json(await users.getUsers());
     } else {
       res.status(403).json({ message: 'You shall not pass!' });
