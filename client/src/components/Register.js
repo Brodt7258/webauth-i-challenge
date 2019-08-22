@@ -1,5 +1,43 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import styled from 'styled-components';
+
+const Form = styled.form`
+  width: 40%;
+  margin: 5rem auto;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  > * {
+    margin: 0.75rem 0;
+  }
+
+  input {
+    padding: 0.5rem;
+    border: 1px solid grey;
+    border-radius: 0.5rem;
+    margin-left: 1rem;
+  }
+
+  button {
+    padding: 0.5rem 2rem;
+    border-radius: 0.5rem;
+    border: none;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+    color: white;
+    background-color: #cc007e;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #ff1aa7
+    }
+  }
+`;
 
 const Register = ({ setUser, setRegister }) => {
   const [username, setUsername] = useState('');
@@ -22,7 +60,8 @@ const Register = ({ setUser, setRegister }) => {
   };
 
   return (
-    <form onSubmit={e => sumbit(e, username, password)}>
+    <Form onSubmit={e => sumbit(e, username, password)}>
+      <h2>Register</h2>
       <div>
         <label htmlFor="">
           Username:
@@ -44,7 +83,7 @@ const Register = ({ setUser, setRegister }) => {
       <button type="submit">
         Register
       </button>
-    </form>
+    </Form>
   );
 };
 

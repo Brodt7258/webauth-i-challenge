@@ -1,8 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import posed from 'react-pose';
+
+import User from './User';
+
+const PosedUsers = posed.ul({
+  shown: {
+    x: '0%',
+    staggerChildren: 100
+  },
+  hidden: {
+    x: '-100%',
+  }
+});
 
 const Users = ({ user }) => {
   const [users, setUsers] = useState(null);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/users', 
@@ -14,11 +28,14 @@ const Users = ({ user }) => {
     )
     .then(({ data }) => {
       setUsers(data);
+      setTimeout(() => {
+        setVisible(true);
+      }, 300);
     })
     .catch(err => {
       console.log(err);
     })
-  }, [user]);
+  }, [user, visible]);
 
   if (!users) {
     return (
@@ -29,15 +46,14 @@ const Users = ({ user }) => {
   }
 
   return (
-    <ul>
+    <PosedUsers
+      pose={visible ? 'shown' : 'hidden' }
+      style={{ listStyle: 'none', marginTop: '5rem', overflowX: 'hidden' }}
+    >
       {users.map(e => (
-        <li key={e.id}>
-          <p>{e.id}</p>
-          <p>{e.username}</p>
-          <p>{e.password}</p>
-        </li>
+        <User key={e.id} user={e} />
       ))}
-    </ul>
+    </PosedUsers>
   );
 };
 

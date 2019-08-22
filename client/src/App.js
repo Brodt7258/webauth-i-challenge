@@ -9,10 +9,13 @@ const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
     margin: 0;
+    padding: 0;
+    overflow-x: hidden !important;
   }
 
   html, body {
-    height: 100%
+    height: 100%;
+    overflow-x: hidden;
   }
 
   body {
@@ -23,6 +26,12 @@ const GlobalStyle = createGlobalStyle`
         #FF9933,
         #cc007e
       );
+      background-repeat: no-repeat,
+      no-repeat;
+  }
+
+  #root {
+    overflow: auto;
   }
 `;
 
